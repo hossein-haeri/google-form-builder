@@ -130,6 +130,7 @@ dmypy.json
 
 # Google API credentials and tokens
 credentials.json
+*credentials.json
 token.json
 service-account-key.json
 client-secret.json

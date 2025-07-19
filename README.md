@@ -33,33 +33,120 @@ pip install -r requirements.txt
 
 You need Google API credentials to create forms. Choose one of these methods:
 
-#### Option A: Service Account (Recommended for automation)
+#### Option A: OAuth2 Client (Recommended for testing)
+⚠️ **Important Note**: This method might not work if:
+- Your Google account is managed by an organization
+- Your organization restricts access to unverified apps
+- Your organization blocks OAuth access to Google Forms
+- You're using a Google Workspace account with strict policies
+
+Best when you want to:
+- Create forms under your personal Google account (gmail.com)
+- Test the tool during development
+- Create forms for personal use
+- Have forms show up in your Google Drive
+
+Steps:
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
 3. Enable **Google Forms API** and **Google Drive API**
-4. Create a **Service Account** 
-5. Download the JSON credentials file
-6. Save it as `credentials.json` in the project root
-   
-   A template is provided in `credentials_example.json`
+4. Configure OAuth Consent Screen:
+   - Go to "APIs & Services" > "OAuth consent screen"
+   - Choose "External" user type
+   - Fill in required fields under "App information":
+     - App name (e.g., "Google Form Builder")
+     - User support email (your email)
+     - Developer contact email (your email)
+   - Skip "App domain" section (not needed for local use)
+   - Click "Save and Continue"
+   - On "Scopes" page:
+     - Click "Add or Remove Scopes"
+     - Add these scopes:
+       - `https://www.googleapis.com/auth/forms.body`
+       - `https://www.googleapis.com/auth/drive`
+     - Click "Save and Continue"
+   - On "Test users" page:
+     - Click "Add Users"
+     - Add your Google email address
+     - Click "Save and Continue"
 
-#### Option B: OAuth2 Client (For interactive use)
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create **OAuth2 credentials** for Desktop application
-3. Download the JSON file
-4. Use it with the `--credentials` flag
+5. Create OAuth Client ID:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth client ID"
+   - Choose "Desktop Application"
+   - Give it a name (e.g., "Google Form Builder Desktop")
+   - Download the JSON file and save as `credentials.json`
+
+When you first run the tool:
+```bash
+python cli.py --credentials credentials.json create examples/sample_questions.json
+```
+It will:
+1. Open your browser
+2. Show "App is not verified" warning (expected for development)
+3. Click "Continue" to proceed
+4. Choose your Google account
+5. Grant the requested permissions
+6. Save the token for future use
+
+#### Common Issues and Solutions
+
+1. **"App is not verified" warning**
+   - This is normal for development
+   - Click "Continue" (or "Advanced" > "Go to {App Name}")
+   - Only you can access the app as a test user
+
+2. **"Error 403: access_denied"**
+   - Make sure you completed OAuth consent screen setup
+   - Verify you added your email as a test user
+   - Check that you added both required scopes
+   - If using a managed Google account:
+     - Try with a personal Gmail account instead
+     - Contact your IT admin for permissions
+     - Consider using Service Account method (Option B)
+
+3. **"Invalid client" error**
+   - Ensure you chose "Desktop Application" type
+   - Download fresh credentials and try again
+
+4. **"Failed to create form" error**
+   - Check that both Forms API and Drive API are enabled
+   - Verify you granted all permissions in consent screen
+   - Try revoking access and authenticating again:
+     1. Go to [Google Account Security](https://myaccount.google.com/security)
+     2. Find the app under "Third-party apps with account access"
+     3. Remove access and try again
+   - If error persists:
+     - Your account might have restrictions
+     - Try with a personal Gmail account
+     - Switch to Service Account method if available
+
+5. **Token Issues**
+   - If you see authentication errors, delete `token.json`
+   - Run the command again to re-authenticate
+
+#### Option B: Service Account (Advanced - requires Google Workspace)
+Only available if you have a Google Workspace account with admin access. Service Accounts cannot directly create forms without domain-wide delegation.
+
+If you need to use a Service Account:
+1. You must have a Google Workspace account
+2. Configure domain-wide delegation for the service account
+3. Grant necessary OAuth scopes:
+   - https://www.googleapis.com/auth/forms
+   - https://www.googleapis.com/auth/drive
+4. Set up user impersonation
+
+For most users, we recommend using Option A (OAuth2) instead.
 
 ### 3. Create Your First Form
 
 ```bash
-# Generate an example file
-python cli.py example examples/my_questions.json
 
-# Validate the input
-python cli.py create examples/my_questions.json --validate-only
+# Validate one of the examples
+python cli.py create examples/sample_questions.json --validate-only
 
-# Create the Google Form
-python cli.py create examples/my_questions.json --credentials credentials.json
+# Create a Google Form from the example
+python cli.py --credentials credentials.json create examples/sample_questions.json
 ```
 
 ## 📋 Supported Input Formats
