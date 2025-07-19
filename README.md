@@ -231,23 +231,42 @@ The tool accepts these common variations:
 ### Basic Commands
 
 ```bash
-# Create a form from JSON file
-python cli.py create questions.json
+# Basic form creation (using example file)
+python cli.py --credentials credentials.json create examples/sample_questions.json
 
-# Create a form from CSV file  
-python cli.py create questions.csv
+# Customize form title and description
+python cli.py --credentials credentials.json create examples/sample_questions.json --title "My Custom Form" --description "A form created with Google Form Builder"
 
-# Create a form from Google Sheets
-python cli.py create "https://docs.google.com/spreadsheets/d/your-sheet-id"
+# Save in existing Google Drive folder
+python cli.py --credentials credentials.json create examples/sample_questions.json --folder-id "1234567890abcdef" --title "My Form in Existing Folder"
 
-# Specify credentials file
-python cli.py create questions.json --credentials /path/to/credentials.json
+# Create new folder and save form in it (uses folder name as form title if no title given)
+python cli.py --credentials credentials.json create examples/sample_questions.json --new-folder "My Forms 2024"
 
-# Override form title and description
-python cli.py create questions.json --title "My Custom Form" --description "Form description"
+# Create nested folders (creates full path if doesn't exist)
+python cli.py --credentials credentials.json create examples/sample_questions.json --new-folder "Work/Projects/Forms/2024" --title "Project Survey"
+
+# Create form from CSV file  
+python cli.py --credentials credentials.json create examples/sample_questions.csv
+
+# Create form from Google Sheets
+python cli.py --credentials credentials.json create "https://docs.google.com/spreadsheets/d/your-sheet-id"
 
 # Validate input without creating form
-python cli.py create questions.json --validate-only
+python cli.py create examples/sample_questions.json --validate-only
+
+Note: For --folder-id, get the ID from the folder's URL:
+1. Open the folder in Google Drive
+2. The URL will be like: https://drive.google.com/drive/folders/1234567890abcdef
+3. Copy the last part (1234567890abcdef) - that's your folder ID
+
+The --new-folder option will:
+1. Create a new folder (or folder structure) in your Google Drive
+2. Save the form in that folder
+3. Use the folder name as form title (if no title specified)
+4. Show you the folder ID for future use
+5. Support nested paths like "Work/Projects/Forms/2024"
+6. Create only missing folders (uses existing ones if found)
 ```
 
 ### Advanced Commands

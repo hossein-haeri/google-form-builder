@@ -64,9 +64,12 @@ def cli(ctx, credentials: Optional[str], token: Optional[str]):
 @click.option('--description', help='Override form description')
 @click.option('--validate-only', is_flag=True, 
               help='Only validate input without creating form')
+@click.option('--folder-id', help='Existing Google Drive folder ID to save the form in')
+@click.option('--new-folder', help='Create a new folder with this name and save the form in it')
 @click.pass_context
 def create(ctx, source: str, input_type: Optional[str], title: Optional[str], 
-          description: Optional[str], validate_only: bool):
+          description: Optional[str], validate_only: bool, folder_id: Optional[str],
+          new_folder: Optional[str]):
     """
     Create a Google Form from input source.
     
@@ -128,7 +131,11 @@ def create(ctx, source: str, input_type: Optional[str], title: Optional[str],
                 sys.exit(1)
         else:
             print_info(f"Creating Google Form from: {source}")
-            result = builder.create_form(source, input_type, title, description)
+            if folder_id and new_folder:
+                print_error("Cannot specify both --folder-id and --new-folder")
+                sys.exit(1)
+            
+            result = builder.create_form(source, input_type, title, description, folder_id, new_folder)
             
             print_success("Google Form created successfully!")
             print(f"📝 Form Title: {result['title']}")

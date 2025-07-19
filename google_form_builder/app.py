@@ -46,9 +46,11 @@ class FormBuilder:
         Returns:
             Input type: 'json', 'csv', or 'sheets'
         """
-        # Check if it's a Google Sheets URL
-        if ('docs.google.com' in source and 'spreadsheets' in source) or \
-           (len(source) > 20 and '/' not in source):  # Likely a sheet ID
+        # Check if it's a Google Sheets URL or ID
+        if ('docs.google.com' in source and 'spreadsheets' in source):
+            return 'sheets'
+        # Check if it's a sheet ID (alphanumeric string of exactly 44 characters)
+        if len(source) == 44 and source.replace('-', '').replace('_', '').isalnum():
             return 'sheets'
         
         # Check file extension
@@ -110,7 +112,8 @@ class FormBuilder:
             raise ValueError(f"Failed to parse {input_type} input: {e}")
     
     def create_form(self, source: str, input_type: Optional[str] = None, 
-                   title: Optional[str] = None, description: Optional[str] = None) -> Dict[str, Any]:
+                   title: Optional[str] = None, description: Optional[str] = None,
+                   folder_id: Optional[str] = None, new_folder: Optional[str] = None) -> Dict[str, Any]:
         """
         Create a Google Form from input source.
         
@@ -136,7 +139,7 @@ class FormBuilder:
         
         # Create the form
         forms_api = self._get_forms_api()
-        result = forms_api.create_form(form_data)
+        result = forms_api.create_form(form_data, folder_id, new_folder)
         
         return result
     

@@ -111,12 +111,14 @@ class GoogleFormsAPI:
         
         return creds
     
-    def create_form(self, form_data: FormData) -> Dict[str, Any]:
+    def create_form(self, form_data: FormData, folder_id: Optional[str] = None, new_folder: Optional[str] = None) -> Dict[str, Any]:
         """
         Create a Google Form from FormData.
         
         Args:
             form_data: The form data to create
+            folder_id: Optional Google Drive folder ID to save the form in
+            new_folder: Optional name for a new folder to create and save the form in
             
         Returns:
             Dictionary containing form details including URL and ID
@@ -125,22 +127,108 @@ class GoogleFormsAPI:
             raise ValueError("API client not initialized")
         
         try:
+            # Set form title - use provided title, folder name, or default
+            form_title = form_data.title
+            if not form_title or form_title == "Untitled Form":
+                if new_folder:
+                    form_title = new_folder.split('/')[-1]  # Use last part of folder path
+                elif form_data.title:
+                    form_title = form_data.title
+                else:
+                    form_title = "Untitled Form"
+
+            # Initialize Drive API service first
+            drive_service = build('drive', 'v3', credentials=self.service._http.credentials)
+
             # Create the form
             form = {
                 "info": {
-                    "title": form_data.title,
+                    "title": form_title,
                     "description": form_data.description or ""
                 }
             }
             
-            print(f"🚀 Creating form: {form_data.title}")
+            print(f"🚀 Creating form: {form_title}")
             result = self.service.forms().create(body=form).execute()
             form_id = result['formId']
+
+            # Update form name in Drive immediately after creation
+            try:
+                drive_service.files().update(
+                    fileId=form_id,
+                    body={'name': form_title}
+                ).execute()
+            except Exception as e:
+                print(f"⚠️ Failed to update form name in Drive: {e}")
+            
+            # Create new folder(s) if requested
+            target_folder_id = folder_id
+            if new_folder:
+                try:
+                    # Split path into parts for nested folders
+                    folder_parts = new_folder.split('/')
+                    current_parent = 'root'  # Start from root
+                    
+                    # Create each folder in path if it doesn't exist
+                    for i, folder_name in enumerate(folder_parts):
+                        # Search for existing folder
+                        query = f"name = '{folder_name}' and mimeType = 'application/vnd.google-apps.folder' and '{current_parent}' in parents and trashed = false"
+                        results = drive_service.files().list(
+                            q=query,
+                            spaces='drive',
+                            fields='files(id, name)'
+                        ).execute()
+                        
+                        if results.get('files'):
+                            # Use existing folder
+                            current_parent = results['files'][0]['id']
+                        else:
+                            # Create new folder
+                            folder_metadata = {
+                                'name': folder_name,
+                                'mimeType': 'application/vnd.google-apps.folder',
+                                'parents': [current_parent]
+                            }
+                            folder = drive_service.files().create(
+                                body=folder_metadata,
+                                fields='id'
+                            ).execute()
+                            current_parent = folder.get('id')
+                    
+                    target_folder_id = current_parent
+                    print(f"✅ Created folder structure: {new_folder}")
+                except Exception as e:
+                    print(f"⚠️ Failed to create folder structure: {e}")
+                    target_folder_id = None
+            
+            # Move form to target folder
+            if target_folder_id:
+                try:
+                    # Get current parent folders
+                    file = drive_service.files().get(
+                        fileId=form_id,
+                        fields='parents'
+                    ).execute()
+                    
+                    previous_parents = ",".join(file.get('parents', []))
+                    
+                    # Move the file to the new folder
+                    drive_service.files().update(
+                        fileId=form_id,
+                        addParents=target_folder_id,
+                        removeParents=previous_parents,
+                        fields='id, parents',
+                        body={'name': form_title}  # Ensure name is correct after move
+                    ).execute()
+                    
+                    print(f"✅ Form saved in: {new_folder if new_folder else target_folder_id}")
+                except Exception as e:
+                    print(f"⚠️ Failed to move form to folder: {e}")
             
             # Add questions to the form
             self._add_questions(form_id, form_data.questions)
             
-            # Get the form URL
+            # Get the form URLs
             form_url = f"https://docs.google.com/forms/d/{form_id}/edit"
             view_url = f"https://docs.google.com/forms/d/{form_id}/viewform"
             
