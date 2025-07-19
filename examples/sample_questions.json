@@ -1,0 +1,90 @@
+[
+  {
+    "question": "What is your full name?",
+    "description": "Please enter your first and last name",
+    "type": "short answer"
+  },
+  {
+    "question": "Tell us about yourself",
+    "description": "Write a brief description about your background and interests",
+    "type": "paragraph"
+  },
+  {
+    "question": "What is your favorite programming language?",
+    "description": "Choose one from the list below",
+    "type": "multiple choice",
+    "options": ["Python", "JavaScript", "Java", "C++", "Go", "Rust", "TypeScript", "C#"]
+  },
+  {
+    "question": "Which technologies do you currently use?",
+    "description": "Select all that apply to your current work or projects",
+    "type": "checkboxes",
+    "options": [
+      "React",
+      "Vue.js",
+      "Angular",
+      "Django",
+      "Flask",
+      "FastAPI",
+      "Node.js",
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "Google Cloud",
+      "PostgreSQL",
+      "MongoDB"
+    ]
+  },
+  {
+    "question": "What is your current experience level?",
+    "description": "",
+    "type": "dropdown",
+    "options": ["Beginner (0-1 years)", "Intermediate (2-4 years)", "Advanced (5-7 years)", "Expert (8+ years)"]
+  },
+  {
+    "question": "Which operating system do you primarily use for development?",
+    "description": "Select your main development environment",
+    "type": "multiple choice",
+    "options": ["Windows", "macOS", "Linux (Ubuntu)", "Linux (Other)", "WSL on Windows"]
+  },
+  {
+    "question": "What type of projects are you most interested in?",
+    "description": "You can select multiple options",
+    "type": "checkboxes",
+    "options": [
+      "Web Development",
+      "Mobile App Development",
+      "Data Science & Analytics",
+      "Machine Learning & AI",
+      "DevOps & Infrastructure",
+      "Game Development",
+      "Desktop Applications",
+      "API Development",
+      "Cybersecurity"
+    ]
+  },
+  {
+    "question": "How did you learn programming?",
+    "description": "Choose the primary method",
+    "type": "dropdown",
+    "options": [
+      "Self-taught (online resources)",
+      "University/College degree",
+      "Coding bootcamp",
+      "On-the-job training",
+      "Online courses (Coursera, Udemy, etc.)",
+      "Books and tutorials",
+      "Mentorship"
+    ]
+  },
+  {
+    "question": "Enter your GitHub username (optional)",
+    "description": "This helps us understand your coding activity",
+    "type": "short answer"
+  },
+  {
+    "question": "Any additional comments or feedback?",
+    "description": "Feel free to share anything else you'd like us to know",
+    "type": "paragraph"
+  }
+] 

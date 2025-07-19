@@ -1,0 +1,11 @@
+Question,Description,Type
+What is your full name?,Please enter your first and last name,short answer
+What is your email address?,We'll use this to contact you,short answer
+Tell us about your background,Share your educational and professional background,paragraph
+What is your favorite color?,Choose one option,"multiple choice: Red, Blue, Green, Yellow, Purple, Orange"
+Which programming languages do you know?,Select all languages you're comfortable with,"checkboxes: Python, JavaScript, Java, C++, Go, Rust, PHP, Ruby"
+What is your experience level?,Select your overall programming experience,"dropdown: Beginner, Intermediate, Advanced, Expert"
+Which frameworks have you used?,Select all that apply,"checkboxes: React, Vue, Angular, Django, Flask, Express, Spring"
+What is your preferred IDE?,Choose your primary development environment,"multiple choice: VS Code, IntelliJ IDEA, PyCharm, Sublime Text, Atom, Vim"
+Where are you located?,Enter your city and country,short answer
+Any additional comments?,Feel free to share anything else,paragraph 
