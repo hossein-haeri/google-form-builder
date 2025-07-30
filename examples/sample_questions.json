@@ -12,7 +12,8 @@
   {
     "question": "What is your full name?",
     "description": "Please enter your first and last name",
-    "type": "short answer"
+    "type": "short answer",
+    "required": true
   },
   {
     "question": "Tell us about yourself",
@@ -33,12 +34,14 @@
     "question": "What is your favorite programming language?",
     "description": "Choose one from the list below",
     "type": "multiple choice",
+    "required": true,
     "options": ["Python", "JavaScript", "Java", "C++", "Go", "Rust", "TypeScript", "C#"]
   },
   {
     "question": "Which technologies do you currently use?",
     "description": "Select all that apply to your current work or projects",
     "type": "checkboxes",
+    "required": true,
     "options": [
       "React",
       "Vue.js",
@@ -59,6 +62,7 @@
     "question": "What is your current experience level?",
     "description": "",
     "type": "dropdown",
+    "required": true,
     "options": ["Beginner (0-1 years)", "Intermediate (2-4 years)", "Advanced (5-7 years)", "Expert (8+ years)"]
   },
   {
@@ -81,6 +85,7 @@
     "question": "What type of projects are you most interested in?",
     "description": "You can select multiple options",
     "type": "checkboxes",
+    "required": true,
     "options": [
       "Web Development",
       "Mobile App Development",

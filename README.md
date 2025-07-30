@@ -15,6 +15,7 @@ A powerful Python tool that automatically generates Google Forms from structured
 - 📊 **Validation**: Comprehensive input validation before form creation
 - 🔐 **Secure Authentication**: Support for both service account and OAuth2 authentication
 - 📋 **Batch Processing**: Process multiple questions at once with intelligent parsing
+- ⭐ **Required Questions**: Set specific questions as mandatory for respondents to answer.
 
 ## 🏗️ Quick Start
 
@@ -161,12 +162,14 @@ Create a JSON file with an array of question objects:
     "question": "What is your favorite color?",
     "description": "Choose one from the list",
     "type": "multiple choice",
-    "options": ["Red", "Green", "Blue", "Yellow"]
+    "options": ["Red", "Green", "Blue", "Yellow"],
+    "required": true
   },
   {
     "question": "Enter your full name",
     "description": "First and last name",
-    "type": "short answer"
+    "type": "short answer",
+    "required": true
   },
   {
     "question": "Tell us about yourself",
@@ -177,21 +180,21 @@ Create a JSON file with an array of question objects:
 ```
 
 **Required fields**: `question`, `type`  
-**Optional fields**: `description`, `options`
+**Optional fields**: `description`, `options`, `required` (defaults to `false`)
 
 ### 2. CSV Format
 
 Create a CSV file with these columns:
 
 ```csv
-Question,Description,Type
-What is your name?,,short answer
-Pick your favorite food,Choose one,multiple choice: Pizza, Sushi, Pasta
-Choose hobbies,Select multiple,checkboxes: Reading, Gaming, Cooking
+Question,Description,Type,Required
+What is your name?,,short answer,yes
+Pick your favorite food,Choose one,multiple choice: Pizza, Sushi, Pasta,yes
+Choose hobbies,Select multiple,checkboxes: Reading, Gaming, Cooking,no
 ```
 
 **Required columns**: `Question`, `Type` (case-insensitive)  
-**Optional columns**: `Description`
+**Optional columns**: `Description`, `Required` (accepts `yes`/`no`, `true`/`false`; defaults to `no`)
 
 For choice-based questions, use the format: `type: option1, option2, option3`
 
@@ -199,14 +202,14 @@ For choice-based questions, use the format: `type: option1, option2, option3`
 
 Create a Google Sheet with the same structure as the CSV format:
 
-| Question | Description | Type |
-|----------|-------------|------|
-| Survey Form | Welcome to our survey | title |
-| Basic Info | Your information | section |
-| What is your name? | | short answer |
-| Preferences | Choose your favorites | section |
-| Pick a fruit | Choose one | multiple choice: Apple, Banana, Cherry |
-| Your hobbies | | checkboxes: Reading, Music, Gaming |
+| Question | Description | Type | Required |
+|----------|-------------|------|----------|
+| Survey Form | Welcome to our survey | title | no |
+| Basic Info | Your information | section | |
+| What is your name? | | short answer | yes |
+| Preferences | Choose your favorites | section | |
+| Pick a fruit | Choose one | multiple choice: Apple, Banana, Cherry | yes |
+| Your hobbies | | checkboxes: Reading, Music, Gaming | no |
 
 **To use**: Share the sheet and copy the URL or sheet ID.
 

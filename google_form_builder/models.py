@@ -25,6 +25,7 @@ class Question(BaseModel):
     description: Optional[str] = Field("", description="Optional description for the question")
     type: QuestionType = Field(QuestionType.MULTIPLE_CHOICE, description="The question type")
     options: Optional[List[str]] = Field(None, description="Options for choice-based questions")
+    required: bool = Field(False, description="Whether the question is required to be answered")
     
     @validator('question')
     def question_must_not_be_empty(cls, v):

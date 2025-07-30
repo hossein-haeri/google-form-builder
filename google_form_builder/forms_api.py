@@ -302,20 +302,20 @@ class GoogleFormsAPI:
         question_item = {
             "title": question.question,
             "description": question.description or "",
-            "questionItem": {}
+            "questionItem": {
+                "question": {
+                    "required": question.required,
+                }
+            }
         }
         
         # Add question type and options
         if question.type == QuestionType.SHORT_ANSWER:
-            question_item["questionItem"]["question"] = {
-                "textQuestion": {}
-            }
+            question_item["questionItem"]["question"]["textQuestion"] = {}
         
         elif question.type == QuestionType.PARAGRAPH:
-            question_item["questionItem"]["question"] = {
-                "textQuestion": {
-                    "paragraph": True
-                }
+            question_item["questionItem"]["question"]["textQuestion"] = {
+                "paragraph": True
             }
         
         elif question.type == QuestionType.MULTIPLE_CHOICE:
@@ -325,11 +325,9 @@ class GoogleFormsAPI:
                     "value": option
                 })
             
-            question_item["questionItem"]["question"] = {
-                "choiceQuestion": {
-                    "type": "RADIO",
-                    "options": options
-                }
+            question_item["questionItem"]["question"]["choiceQuestion"] = {
+                "type": "RADIO",
+                "options": options
             }
         
         elif question.type == QuestionType.CHECKBOXES:
@@ -339,11 +337,9 @@ class GoogleFormsAPI:
                     "value": option
                 })
             
-            question_item["questionItem"]["question"] = {
-                "choiceQuestion": {
-                    "type": "CHECKBOX",
-                    "options": options
-                }
+            question_item["questionItem"]["question"]["choiceQuestion"] = {
+                "type": "CHECKBOX",
+                "options": options
             }
         
         elif question.type == QuestionType.DROPDOWN:
@@ -353,11 +349,9 @@ class GoogleFormsAPI:
                     "value": option
                 })
             
-            question_item["questionItem"]["question"] = {
-                "choiceQuestion": {
-                    "type": "DROP_DOWN",
-                    "options": options
-                }
+            question_item["questionItem"]["question"]["choiceQuestion"] = {
+                "type": "DROP_DOWN",
+                "options": options
             }
         
         return {
@@ -403,4 +397,4 @@ class GoogleFormsAPI:
             
         except Exception as e:
             print(f"⚠️ Failed to list forms: {e}")
-            return [] 
+            return []

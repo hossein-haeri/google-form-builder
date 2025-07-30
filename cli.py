@@ -252,7 +252,8 @@ def example(output_path: str, output_format: str):
         {
             "question": "What is your full name?",
             "description": "Please enter your first and last name",
-            "type": "short answer"
+            "type": "short answer",
+            "required": True
         },
         {
             "question": "Tell us about yourself",
@@ -296,7 +297,7 @@ def example(output_path: str, output_format: str):
             import csv
             with open(output_path, 'w', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
-                writer.writerow(['Question', 'Description', 'Type'])
+                writer.writerow(['Question', 'Description', 'Type', 'Required'])
                 
                 for q in sample_questions:
                     if q.get('options'):
@@ -307,7 +308,8 @@ def example(output_path: str, output_format: str):
                     writer.writerow([
                         q['question'],
                         q.get('description', ''),
-                        type_str
+                        type_str,
+                        'Yes' if q.get('required', False) else 'No'
                     ])
         
         print_success(f"Example {output_format.upper()} file created: {output_path}")
