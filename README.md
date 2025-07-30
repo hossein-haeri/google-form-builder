@@ -201,7 +201,10 @@ Create a Google Sheet with the same structure as the CSV format:
 
 | Question | Description | Type |
 |----------|-------------|------|
+| Survey Form | Welcome to our survey | title |
+| Basic Info | Your information | section |
 | What is your name? | | short answer |
+| Preferences | Choose your favorites | section |
 | Pick a fruit | Choose one | multiple choice: Apple, Banana, Cherry |
 | Your hobbies | | checkboxes: Reading, Music, Gaming |
 
@@ -216,6 +219,8 @@ Create a Google Sheet with the same structure as the CSV format:
 | `multiple choice` | Single selection from options | Yes | Multiple choice |
 | `checkboxes` | Multiple selections from options | Yes | Checkboxes |
 | `dropdown` | Dropdown selection from options | Yes | Dropdown |
+| `section` | Creates a new form section | No | Page break |
+| `title` | Adds a text-only title | No | Title and description |
 
 ### Type Variations and Aliases
 
@@ -225,6 +230,8 @@ The tool accepts these common variations:
 - `radio` → `multiple choice`
 - `checkbox`, `multi_select` → `checkboxes`
 - `select` → `dropdown`
+- `page_break` → `section`
+- `header` → `title`
 
 ## 🖥️ Command Line Interface
 
@@ -388,16 +395,36 @@ else:
 ```json
 [
   {
+    "question": "Developer Skills Survey",
+    "description": "Help us understand your technical background",
+    "type": "title"
+  },
+  {
+    "question": "Experience",
+    "description": "Tell us about your programming experience",
+    "type": "section"
+  },
+  {
     "question": "What is your experience level?",
     "description": "Select your overall programming experience",
     "type": "dropdown",
     "options": ["Beginner", "Intermediate", "Advanced", "Expert"]
   },
   {
+    "question": "Technologies",
+    "description": "Your technical stack",
+    "type": "section"
+  },
+  {
     "question": "Which technologies do you use?",
     "description": "Select all that apply",
     "type": "checkboxes",
     "options": ["Python", "JavaScript", "React", "Django", "Docker"]
+  },
+  {
+    "question": "Project Interests",
+    "description": "Tell us about your interests",
+    "type": "section"
   },
   {
     "question": "Describe your ideal project",
@@ -411,10 +438,14 @@ else:
 
 ```csv
 Question,Description,Type
+Developer Survey,Welcome to our developer survey,title
+Personal Information,Basic details about you,section
 What is your name?,Enter your full name,short answer
 What is your email?,We'll use this for updates,short answer
+Technical Skills,Your programming experience,section
 Tell us about your background,Share your experience and skills,paragraph
 What's your favorite language?,Choose your preferred programming language,multiple choice: Python, JavaScript, Java, C++, Go
+Framework Experience,Your development tools,section
 Which frameworks do you know?,Select all you're familiar with,checkboxes: React, Vue, Angular, Django, Flask
 What's your experience level?,Choose the option that best describes you,dropdown: Beginner, Intermediate, Advanced, Expert
 ```

@@ -1,5 +1,15 @@
 [
   {
+    "question": "Developer Survey Form",
+    "description": "Help us understand your background and preferences",
+    "type": "title"
+  },
+  {
+    "question": "Personal Information",
+    "description": "Basic details about you",
+    "type": "section"
+  },
+  {
     "question": "What is your full name?",
     "description": "Please enter your first and last name",
     "type": "short answer"
@@ -8,6 +18,16 @@
     "question": "Tell us about yourself",
     "description": "Write a brief description about your background and interests",
     "type": "paragraph"
+  },
+  {
+    "question": "Technical Background",
+    "description": "Tell us about your technical skills and preferences",
+    "type": "section"
+  },
+  {
+    "question": "Programming Experience",
+    "description": "Details about your programming journey",
+    "type": "title"
   },
   {
     "question": "What is your favorite programming language?",
@@ -46,6 +66,16 @@
     "description": "Select your main development environment",
     "type": "multiple choice",
     "options": ["Windows", "macOS", "Linux (Ubuntu)", "Linux (Other)", "WSL on Windows"]
+  },
+  {
+    "question": "Project Preferences",
+    "description": "Tell us about the kind of work you enjoy",
+    "type": "section"
+  },
+  {
+    "question": "Project Interests",
+    "description": "Your preferred areas of development",
+    "type": "title"
   },
   {
     "question": "What type of projects are you most interested in?",

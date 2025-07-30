@@ -273,7 +273,32 @@ class GoogleFormsAPI:
         """Create a request to add a question to the form."""
         location = {"index": index}
         
-        # Base question structure
+        # Handle sections and headers differently
+        if question.type == QuestionType.SECTION:
+            return {
+                "createItem": {
+                    "item": {
+                        "title": question.question,
+                        "description": question.description or "",
+                        "pageBreakItem": {}
+                    },
+                    "location": location
+                }
+            }
+        
+        elif question.type == QuestionType.TITLE:
+            return {
+                "createItem": {
+                    "item": {
+                        "title": question.question,
+                        "description": question.description or "",
+                        "textItem": {}
+                    },
+                    "location": location
+                }
+            }
+        
+        # Base question structure for regular questions
         question_item = {
             "title": question.question,
             "description": question.description or "",

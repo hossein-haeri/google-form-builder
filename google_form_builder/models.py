@@ -14,6 +14,8 @@ class QuestionType(str, Enum):
     MULTIPLE_CHOICE = "multiple choice"
     CHECKBOXES = "checkboxes"
     DROPDOWN = "dropdown"
+    SECTION = "section"
+    TITLE = "title"
 
 
 class Question(BaseModel):
@@ -53,6 +55,10 @@ class Question(BaseModel):
                 'select': QuestionType.DROPDOWN,
                 'checkbox': QuestionType.CHECKBOXES,
                 'multi_select': QuestionType.CHECKBOXES,
+                'page_break': QuestionType.SECTION,
+                'section': QuestionType.SECTION,
+                'title': QuestionType.TITLE,
+                'header': QuestionType.TITLE,
             }
             
             if v in type_mapping:
@@ -88,7 +94,10 @@ class Question(BaseModel):
             
             return cleaned_options
         
-        # For short answer and paragraph, options should be None or empty
+        # For sections, headers, short answer and paragraph, options should be None or empty
+        if question_type in [QuestionType.SECTION, QuestionType.TITLE]:
+            return None
+        
         return None
     
     class Config:
